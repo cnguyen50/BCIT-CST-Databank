@@ -12,3 +12,4 @@ Welcome to my **BCIT Computing Databank** — a collection of quizzes, labs, not
 ---
 
 🧩 *This site automatically syncs from my Google Drive using rclone + GitHub Actions.*
+# trigger workflow registration
