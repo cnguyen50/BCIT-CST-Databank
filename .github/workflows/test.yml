@@ -1,0 +1,7 @@
+name: Minimal Test
+on: workflow_dispatch
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "✅ GitHub Actions is detecting workflows correctly."
