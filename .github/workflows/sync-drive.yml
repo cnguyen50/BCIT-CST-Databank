@@ -1,10 +1,8 @@
 name: Sync Google Drive (CST Term 2) to Repo
 
 on:
-  # Runs automatically every day at 8 AM Pacific
   schedule:
-    - cron: '0 15 * * *'   # 8 AM PST = 15:00 UTC
-  # Allows you to manually trigger the workflow from the Actions tab
+    - cron: '0 15 * * *'   # every day at 8 AM PST
   workflow_dispatch:
 
 jobs:
@@ -12,16 +10,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout your repo
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2️⃣ Install rclone
       - name: Install rclone
         run: |
           curl https://rclone.org/install.sh | sudo bash
 
-      # 3️⃣ Configure rclone using your GitHub Secret
       - name: Set up rclone config
         run: |
           mkdir -p ~/.config/rclone
@@ -30,24 +25,20 @@ jobs:
         env:
           RCLONE_CONFIG_GDRIVE: ${{ secrets.RCLONE_CONFIG_GDRIVE }}
 
-      # 4️⃣ Sync Google Drive → ./data folder
       - name: Sync Google Drive to repo
         run: |
-          rclone sync "gdrive:/CST/TERM 2" ./data --create-empty-src-dirs --progress
+          rclone sync "gdrive:/CST/TERM 2" ./data --create-empty-src-dirs --progress --max-size 50M
 
-      # 5️⃣ Install ImageMagick for HEIC conversion
       - name: Install ImageMagick
         run: |
           sudo apt-get update
           sudo apt-get install -y imagemagick heif-gdk-pixbuf
 
-      # 6️⃣ Convert .heic images → .jpg
       - name: Convert HEIC to JPG
         run: |
           find ./data -type f -iname "*.heic" -exec mogrify -format jpg {} \;
           find ./data -type f -iname "*.heic" -delete
 
-      # 7️⃣ Commit and push any changes
       - name: Commit and push changes
         run: |
           git config user.name "github-actions[bot]"
