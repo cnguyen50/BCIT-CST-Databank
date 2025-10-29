@@ -1,4 +1,4 @@
-name: Sync Google Drive (CST Term 2) to Repo
+name: Sync Drive Test Workflow
 
 on:
   schedule:
