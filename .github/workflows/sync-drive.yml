@@ -27,16 +27,16 @@ jobs:
         env:
           RCLONE_CONFIG_GDRIVE: ${{ secrets.RCLONE_CONFIG_GDRIVE }}
 
-      - name: Debug Google Drive listing
+      - name: Debug Google Drive folder listing
         run: |
-          echo "Checking visible files in /CST/TERM 2..."
-          rclone ls "gdrive:/CST/TERM 2" --max-depth 2 || echo "No files found."
+          echo "Checking files in TERM 2 folder (by ID)..."
+          rclone ls "gdrive:1DRb-EoD-3_07TQXuM9syoO2S6EeGChUy" --max-depth 2 || echo "No files found or access issue."
 
-      - name: Sync Google Drive to repo (follow shortcuts + shared)
+      - name: Sync Google Drive to repo (direct folder ID)
         run: |
-          rclone sync "gdrive:/CST/TERM 2" ./data \
-            --drive-skip-shortcuts=false \
+          rclone sync "gdrive:1DRb-EoD-3_07TQXuM9syoO2S6EeGChUy" ./data \
             --drive-shared-with-me \
+            --drive-skip-shortcuts=false \
             --create-empty-src-dirs \
             --progress \
             --max-size 50M \
