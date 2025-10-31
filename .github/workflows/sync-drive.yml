@@ -27,9 +27,20 @@ jobs:
         env:
           RCLONE_CONFIG_GDRIVE: ${{ secrets.RCLONE_CONFIG_GDRIVE }}
 
-      - name: Sync Google Drive to repo
+      - name: Debug Google Drive listing
         run: |
-          rclone sync "gdrive:/CST/TERM 2" ./data --create-empty-src-dirs --progress --max-size 50M
+          echo "Checking visible files in /CST/TERM 2..."
+          rclone ls "gdrive:/CST/TERM 2" --max-depth 2 || echo "No files found."
+
+      - name: Sync Google Drive to repo (follow shortcuts + shared)
+        run: |
+          rclone sync "gdrive:/CST/TERM 2" ./data \
+            --drive-skip-shortcuts=false \
+            --drive-shared-with-me \
+            --create-empty-src-dirs \
+            --progress \
+            --max-size 50M \
+            --verbose
 
       - name: Install ImageMagick
         run: |
